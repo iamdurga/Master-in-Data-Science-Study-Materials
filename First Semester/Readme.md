@@ -1,7 +1,7 @@
 # First Semester
 * [Data Structure and Algorithms]()
-    * [Notes](/Notes)
-    * [Assignments](/Assignments)
+    * [Notes](/Data Structure and Algorithms/Notes)
+    * [Assignments](Data Structure and Algorithms/Assignments)
 * [Database Management System]()
     * [Notes]()
     * [Assignments]()
