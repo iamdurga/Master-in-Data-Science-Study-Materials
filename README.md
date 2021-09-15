@@ -7,4 +7,4 @@
         * Extra Files(ex. Readme.md, Micro-syallabus)
 
 ## Semester One
-* [Link](First-Semester)
+* [Link](First Semester)
