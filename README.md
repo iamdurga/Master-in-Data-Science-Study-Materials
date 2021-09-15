@@ -4,6 +4,7 @@
     * Course Folder
         * Notes Folder
         * Assignments Folder
+            * Data
         * Extra Files(ex. Readme.md, Micro-syallabus)
 
 ## Semester One
