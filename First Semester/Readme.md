@@ -1,7 +1,7 @@
 # First Semester
-* [Data Structure and Algorithms]()
-    * [Notes](/Data Structure and Algorithms/Notes)
-    * [Assignments](Data Structure and Algorithms/Assignments)
+* [Data Structure and Algorithms](https://github.com/iamdurga/MDS-Private-Study-Materials/tree/master/First%20Semester/Data%20Structure%20and%20Algoritms)
+    * [Notes](https://github.com/iamdurga/MDS-Private-Study-Materials/tree/master/First%20Semester/Data%20Structure%20and%20Algoritms/Notes)
+    * [Assignments](https://github.com/iamdurga/MDS-Private-Study-Materials/tree/master/First%20Semester/Data%20Structure%20and%20Algoritms/Assignments)
 * [Database Management System]()
     * [Notes]()
     * [Assignments]()
