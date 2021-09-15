@@ -7,4 +7,4 @@
         * Extra Files(ex. Readme.md, Micro-syallabus)
 
 ## Semester One
-* [Link](First Semester)
+* [Link](https://github.com/iamdurga/MDS-Private-Study-Materials/tree/master/First%20Semester)
