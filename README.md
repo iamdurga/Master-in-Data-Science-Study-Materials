@@ -1,10 +1,13 @@
 # MDS-Private-Study-Materials
+The contents in this repository is used by myself as being student of Master in Data Science, offered by Tribhuwan University starting from 2021.
+
 ## Structure of Directories
 * Semester Folder
     * Course Folder
         * Notes Folder
         * Assignments Folder
             * Data
+        * Project Folder 
         * Extra Files(ex. Readme.md, Micro-syallabus)
 
 ## Semester One
