@@ -1,0 +1,318 @@
+---
+title: "Assignment 6"
+author: "Durga Pokharel"
+date: "24/12/2021"
+output: html_document
+---
+
+# Q.N.1.
+Use the attached Nepal COVID-19 data extracted from Wikipedia to fit the following models with daily deaths as dependent variable and time as independent variable.  
+
+First plot the daily deaths by time and distribute the three outliers (added deaths around timeline of 400) before fitting the following models in the outlier adjusted data on training and testing datasets: 
+
+```{r}
+library(readxl)
+data <- read_excel("F:/MDS-Private-Study-Materials/First Semester/Statistical Computing with R/Assignments/Data/covid_tbl_final.xlsx")
+
+str(data)
+
+
+
+```
+
+```{r}
+plot(data$Date, data$Deaths_total, main = "Total Deaths", xlab = "Date", ylab = "Deaths_total")
+
+```
+
+
+The graph shows there’s a break in between so the trend is discontinued for some days. So we plot daily deaths next to see what date has the breakage.
+
+```{r}
+#plotting daily deaths by time 
+plot(data$Date, data$Deaths_daily, main = "Daily deaths", xlab = "Date", ylab = "Daily Deaths")
+
+
+```
+We observed three outliers in the above plot. We need to identify the date on which the outlier is present.
+
+
+```{r}
+# Identify outliers
+# Value 75 has been choosed based upon the graph observation.
+outliers <- data[which(data$Deaths_daily > 75), ]
+head(outliers[, c("SN","Date", "Deaths_daily")])
+```
+It shows that there are three records during february and march which has unusual no. of deaths. This data is correct as it was the correction over past counts. But this can’t be considered as a death of single date. Thus we need to distribute the death accordingly.
+
+We use daily % over total till that date to distribute the rate proportionally.
+
+```{r}
+distribute_outlier <- function(SN_value) {
+#SN_value = 399
+  
+  #Create adjustment to be made
+  adjustment <- data[data$SN == SN_value, ]$Deaths_daily
+  
+  # Calculate average daily deaths based on last 60 days
+  avg_deaths <- ceiling(mean(data[data$SN %in% c((SN_value - 1):(SN_value - 1 - 60)),]$Deaths_daily))
+  
+  # Assign average daily deaths 
+  data[data$SN == SN_value, ]$Deaths_daily <- avg_deaths
+  
+  # Compute the total deaths till SN_Value
+  total_deaths_399 <- sum(data[data$SN <= SN_value, ]$Deaths_daily)
+  
+  # Daily Death percent contribution till SN_Value
+  daily_Death_percent <- data[data$SN <= SN_value, ]$Deaths_daily / total_deaths_399
+  
+  # Daily death distribution value
+  daily_Death_distribution <- round(daily_Death_percent * (adjustment - avg_deaths))
+  
+  # Add the distribution value to all the days
+  data[data$SN <= SN_value, ]$Deaths_daily = data[data$SN <= SN_value, ]$Deaths_daily + daily_Death_distribution
+  
+  # Get the remaining to be adjusted value
+  additional_adjustment = (adjustment - avg_deaths) - sum(daily_Death_distribution)
+  
+  # Distribute each to the past few days
+  additioal_distribution_range <- data$SN %in% c(SN_value: (SN_value -  additional_adjustment + 1))
+  data[additioal_distribution_range, ]$Deaths_daily <- (data[additioal_distribution_range, ]$Deaths_daily + 1)
+  return(data)
+  }
+
+
+
+```
+Lets plot the train again.
+```{r}
+data <- distribute_outlier(399)
+plot(data$Date,
+  data$Deaths_daily,
+  main = "Daily Deaths: 23 Jan 2020
+  - 31 May 2021",
+  xlab = "Date",
+  ylab = "Daily Deaths"
+)
+```
+```{r}
+# Call distribute_outlier function to handle outlier value
+# Call distribute_outlier function to handle outlier value
+data <- distribute_outlier(401)
+
+# Plot the graph on new adjustment
+plot(data$Date,
+  data$Deaths_daily,
+  main = "Daily Deaths: 23 Jan 2020
+  - 31 May 2021",
+  xlab = "Date",
+  ylab = "Daily Deaths"
+)
+
+```
+
+
+
+
+
+```{r}
+# Call distribute_outlier function to handle outlier value
+data <- distribute_outlier(408)
+
+# Plot the graph on new adjustment
+plot(data$Date,
+  data$Deaths_daily,
+  main = "Daily Deaths: 23 Jan 2020
+  - 31 May 2021",
+  xlab = "Date",
+  ylab = "Daily Deaths"
+)
+
+```
+total based on daily deaths.
+
+````{r}
+data$new_deaths_total <- cumsum(data$Deaths_daily)
+
+```
+
+First, let’s plot the adjusted data.
+
+```{r}
+
+plot(data$Date,
+  data$new_deaths_total,
+  main = "Daily Covid Deaths,
+  Nepal: 23 Jan - 23 Feb 2021",
+  xlab = "Date",
+  ylab = "Daily Deaths")
+```
+Next, we need to do data partition into training and test set.
+
+```{r}
+set.seed(13)
+
+# Random sample for train test split
+index = sample(2, nrow(data), replace = T, prob = c(0.7, 0.3))
+
+# Get Train and test data
+train.data = data[index == 1, ]
+test.data = data[index == 2, ]
+
+```
+
+# Linear Regression Model
+```{r}
+lm1 <- lm(new_deaths_total ~ SN, data = train.data)
+summary(lm1)
+```
+# plotting linear regression
+```{r}
+# Plot simple linear regression model
+plot(new_deaths_total ~ SN, 
+     data = train.data,
+     main = "Daily Covid Deaths, Nepal",
+     xlab = "Date",
+     ylab = "Daily Deaths")
+abline(lm(new_deaths_total ~ SN, data = train.data), col = "red", lwd=2)
+```
+# Constructing quadratic regression model
+```{r}
+
+qlm <- lm(new_deaths_total ~ poly(SN, 2, raw=T), data = train.data)
+summary(qlm)
+```
+# Quadratic linear model
+```{r}
+ 
+plot(new_deaths_total ~ SN, 
+     data = train.data,
+     main = "Cumulative Covid Deaths",
+     xlab = "Date",
+     ylab = "Cumulative Deaths")
+
+lines(fitted(qlm) ~ SN, data=train.data, col="red", lwd=2)
+
+```
+# 3.Cubic regression Model
+```{r}
+clm <- lm(new_deaths_total ~ poly(SN, 3, raw=T), data = train.data)
+summary(clm)
+```
+```{r}
+ 
+plot(new_deaths_total ~ SN, 
+     data = train.data,
+     main = "Cumulative Covid Deaths",
+     xlab = "Date",
+     ylab = "Cumulative Deaths")
+
+lines(fitted(clm) ~ SN, data=train.data, col="red", lwd=2)
+```
+# 4. Double quardatic linear regression model.
+```{r}
+dlm <- lm(new_deaths_total ~ poly(SN, 4, raw=T), data = train.data)
+summary(qlm)
+
+```
+# Plot of double quardatic model.
+```{r}
+ 
+plot(new_deaths_total ~ SN, 
+     data = train.data,
+     main = "Cumulative Covid Deaths",
+     xlab = "Date",
+     ylab = "Cumulative Deaths")
+
+lines(fitted(dlm) ~ SN, data=train.data, col="red", lwd=2)
+
+```
+# 5. Fifth order linear regression model.
+
+```{r}
+flm <- lm(new_deaths_total ~ poly(SN, 5, raw=T), data = train.data)
+summary(flm)
+
+```
+# Plot of fifth order regression model
+
+```{r}
+plot(new_deaths_total ~ SN, 
+     data = train.data,
+     main = "Cumulative Covid Deaths",
+     xlab = "Date",
+     ylab = "Cumulative Deaths")
+
+lines(fitted(flm) ~ SN, data=train.data, col="red", lwd=2)
+
+```
+# 6.KNN Regression model
+```{r}
+library(caret)
+Knreg<-knnreg(new_deaths_total~SN, data = train.data)
+summary(Knreg)
+```
+
+# 7. ANN-MLP regression model with 2 hidden layers with 3 and 2 neurons
+
+```{r}
+
+library(neuralnet)
+
+
+ann<- neuralnet(Deaths_total ~ SN,
+               data=train.data,
+               hidden = c(3,2),
+               linear.output=F)
+
+plot(ann)
+
+```
+# 8.Select the best model with lowest RMSE on the test data.
+```{r}
+# Evaluate Linear Model
+pred = predict(lm1, test.data)
+lm1_RMSE <- RMSE(pred, test.data$new_deaths_total)
+
+# Evaluate Quadratic Linear Model
+pred = predict(qlm, test.data)
+qlm_RMSE<- RMSE(pred, test.data$new_deaths_total)
+
+# Evaluate Cubic Linear Model
+pred = predict(clm, test.data)
+clm_RMSE<- RMSE(pred, test.data$new_deaths_total)
+
+# Evaluate Double Quadratic Linear Model
+pred = predict(dlm, test.data)
+dlm_RMSE <- RMSE(pred, test.data$new_deaths_total)
+
+# Evaluate Fifth Order Polynomial Linear Model
+pred = predict(flm, test.data)
+flm_RMSE <- RMSE(pred, test.data$new_deaths_total)
+
+# Evaluate KNN Model
+pred = predict(Knreg, data.frame(test.data))
+Knreg_RMSE <- RMSE(pred, test.data$new_deaths_total)
+
+# Evaluate Neural Network Model
+nn.results <- compute(ann, test.data)
+ann_RMSE <- RMSE(nn.results$net.result, test.data$new_deaths_total)
+
+# Add all calculated RMSE to the data frame and print the result
+RMSE_data <- data.frame(
+  "Linear Model" = lm1_RMSE,
+  "Quadratic Model " = qlm_RMSE,
+  "Cubic Model" = clm_RMSE, 
+  "Double Quadratic Model" = dlm_RMSE, 
+  "Fifth Order Linear Model" = flm_RMSE, 
+  "K Nearest Neighbour" = Knreg_RMSE, 
+  "Artificial Neural Network" = ann_RMSE
+  )
+print(RMSE_data)
+```
+# 9.Write a summary and recommendation for Ministry of Health, Nepal.
+
+We fitted different models like simple linear regression model, Quadratic model, Cubic model and so on till fifth order linear model including K Nearest Neighbor and Artificial Neural network for the given COVID data. The linear model fitted well with the training data when R Squared is compared but when RMSE is compared on the test data, KNN model has the lowest error.
+
+We can give recommendation for Ministry of Health, Nepal to use KNN model for prediction of deaths due to COVID in future.
+
