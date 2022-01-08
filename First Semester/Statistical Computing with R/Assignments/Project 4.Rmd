@@ -1,0 +1,700 @@
+---
+title: "Project 4"
+author: "Durga Pokharel"
+date: "05/01/2022"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+```{r}
+# Loading the data here
+library(haven)
+bank_loan_df <- read_sav("F:/MDS-Private-Study-Materials/First Semester/Statistical Computing with R/Assignments/Data/P4_bankloan_5000_clients.sav")
+bank_loan_df$defaulted_loan<-as.factor(bank_loan_df$defaulted_loan)
+bank_loan_df$education_level<-as.factor(bank_loan_df$education_level)
+str(bank_loan_df)
+
+```
+This is a hypothetical data file that concerns a bank's efforts to redu" " ce" "the rate of loan defaults. This file contains financial and demographic" "information on 5000 past customers that the bank will use to create binning rule.
+
+# Train Test Validation
+```{r}
+library(caret)
+
+```
+# Testing the data into training and testing set
+```{r}
+set.seed(1234)
+ind = sample(2,nrow(bank_loan_df),replace = T, prob = c(0.8, 0.3))
+train_data <- bank_loan_df[ind==1,]
+test_data <- bank_loan_df[ind==2,]
+```
+
+# Logistic Regression
+## Training the logictic model
+```{r,message=FALSE}
+logic_model <- train(defaulted_loan~., data = train_data, method = "glm", family= "binomial")
+summary(logic_model)
+```
+# Testing the Logistic model
+```{r}
+pred1 <- predict(logic_model, test_data)
+```
+
+# Confusion Matrix
+```{r}
+confusionMatrix(pred1, test_data$defaulted_loan)
+```
+# KNN Model with train/test validation
+```{r}
+knn_model<-train(defaulted_loan~.,data = train_data,
+ method="knn",
+ preProcess = c("center", "scale"),
+ tuneLength = 10
+ )
+
+```
+
+# Obtain the result
+```{r}
+knn_model$result
+```
+
+# Testing the model
+```{r}
+pred2 <- predict(knn_model, test_data)
+```
+
+# Confusion Matrix
+```{r}
+confusionMatrix(pred2,test_data$defaulted_loan)
+```
+# Fitting Naive Bayes 
+## Training the model
+```{r}
+library(e1071)
+naive_model <- naiveBayes(defaulted_loan~., train_data)
+summary(naive_model)
+```
+## Testing the model
+```{r}
+pred3 <- predict(naive_model, test_data)
+
+
+```
+
+## Confusion Matrix
+```{r}
+confusionMatrix(pred3,test_data$defaulted_loan)
+```
+# Support Vector Machine (SVM) Model
+## Training the model
+```{r}
+svm_model <- svm(formula= defaulted_loan~., data = train_data, type = "C-classification", kernel= "linear")
+summary(svm_model)
+```
+## Testing the Model
+```{r}
+pred4 <- predict(svm_model, test_data)
+
+```
+
+## Confusion Matrix
+```{r}
+confusionMatrix(pred4, test_data$defaulted_loan)
+```
+# Decision Tree Model
+## Training the model
+```{r}
+decision_tree_model <-train(defaulted_loan~.,
+ data = train_data,
+ method="rpart",
+ parms = list(split = "information"),
+ tuneLength=10
+ )
+
+
+```
+## Testing the model
+```{r}
+pred5 <- predict(decision_tree_model, test_data)
+
+```
+## Confusion Matrix
+```{r}
+confusionMatrix(pred5, test_data$defaulted_loan)
+```
+# Artifical Neural Network (ANN) Model
+## Training the Model
+```{r}
+ann_model <- train(defaulted_loan ~ ., data = train_data, 
+method = "nnet",
+preProcess = c("center","scale"), 
+maxit = 250, # Maximum number of iterations
+tuneGrid = data.frame(size = 1, decay = 0),
+ # tuneGrid = data.frame(size = 0, decay = 0),skip=TRUE, # Technically, this is log-reg
+metric = "Accuracy")
+
+
+```
+## Testing the model
+```{r}
+pred6 <- predict(ann_model, test_data)
+```
+
+## Confusion Matrix
+```{r}
+confusionMatrix(pred6, test_data$defaulted_loan)
+```
+# Leave one Out Validation
+## Read the data
+
+
+
+```{r}
+library(haven)
+bank_loan_df <- read_sav("F:/MDS-Private-Study-Materials/First Semester/Statistical Computing with R/Assignments/Data/P4_bankloan_5000_clients.sav")
+bank_loan_df$defaulted_loan<-as.factor(bank_loan_df$defaulted_loan)
+bank_loan_df$education_level<-as.factor(bank_loan_df$education_level)
+
+```
+
+# Logistic Regression With LOOCV Validation
+## Training Logistic Regression Model
+```{r}
+set.seed(1234)
+library(caret)
+
+```
+
+```{r}
+ind<-sample(2,nrow(bank_loan_df),replace=T,prob = c(0.7,0.3))
+ train_data<-bank_loan_df[ind==1,]
+ test_data<-bank_loan_df[ind==2,]
+
+```
+
+## Setting Up the Train Control
+```{r}
+loocv_train_control<-trainControl(method = "LOOCV")
+```
+# Logistic Regression With LOOCV Validation
+## Training Logistic Regression Model
+```{r}
+#logistic_clf1<-train(defaulted_loan~.,
+ #data=train_data,
+ #method="glm",
+ #family="binomial",
+ #trControl=loocv_train_control, 
+ #verbose=F
+# )
+
+
+```
+# KNN Model with LOOCV validation
+## Training KNN Model
+```{r}
+knn_clf1<-train(defaulted_loan~.,data = train_data,
+ method="knn",
+ trControl=loocv_train_control
+ )
+
+
+```
+## Obtain the result
+```{r}
+knn_clf1$result
+```
+# Confusion Matrix for Model Evaluation
+```{r}
+predicted_val_knn1<-predict(knn_clf1,newdata = test_data)
+confusionMatrix(predicted_val_knn1,test_data$defaulted_loan)
+
+```
+# Naïve Bayes classifier
+## Training the Model
+```{r}
+nb_clf1<-train(defaulted_loan~.,
+ data=train_data,
+ method="naive_bayes",
+ usepoisson = TRUE,
+ trControl=loocv_train_control
+ )
+
+
+```
+# Making Prediction on Test Data
+```{r}
+predicted_val_nb1<-predict(nb_clf1,newdata = test_data)
+
+```
+# Confusion Matrix for Model Evaluation
+```{r}
+confusionMatrix(predicted_val_nb1,test_data$defaulted_loan)
+```
+# Support Vector Machine (SVM) Model
+```{r}
+#ctrl <- trainControl(method = "LOOCV", savePred=T)
+ #svm_clf1<-train(defaulted_loan~.,
+ # data=train_data,
+ # method="svmLinear",
+ # trControl=ctrl,
+ # )
+ #svm_clf
+
+```
+
+# Making the Prediction for test data
+
+```{r}
+#predicted_val_svm1<-predict(svm_clf1,newdata = test_data)
+```
+
+# Confusion Matrix for Model Evaluation
+```{r}
+#confusionMatrix(predicted_val_svm1,test_data$defaulted_loan)
+```
+ The Model did not Converge to a solution. Leaving it as is for now.
+# Decision Tree Model
+```{r}
+#dtree_clf1<-train(defaulted_loan~.,
+#data = train_data,
+#method="rpart",
+#parms = list(split = "information"),
+#tuneLength=10,
+# trControl=loocv_train_control
+ #)
+#dtree_clf1
+
+```
+
+# Making the Prediction for test data
+```{r}
+#predicted_val_dtree1<-predict(dtree_clf1,newdata = test_data)
+```
+
+# Confusion Matrix for Model Evaluation
+```{r}
+# confusionMatrix(predicted_val_dtree1,test_data$defaulted_loan)
+```
+
+# Artifical Neural Network (ANN) Model
+## Training the Model
+```{r}
+#ann_clf1 <- train(defaulted_loan ~ ., data = train_data, 
+# method = "nnet",
+ # preProcess = c("center","scale"), 
+# maxit = 250, # Maximum number of iterations
+ # tuneGrid = data.frame(size = 1, decay = 0),
+ # tuneGrid = data.frame(size = 0, decay = 0),skip=TRUE, # Technically, this is log-reg
+ # metric = "Accuracy",
+ # trControl=loocv_train_control)
+
+
+```
+
+## Making the Predictions for Test data
+```{r}
+#predicted_val_ann1<-predict(ann_clf1,newdata = test_data)
+```
+
+## Confusion Matrix for the Model Evaluation
+```{r}
+#confusionMatrix(predicted_val_ann1,test_data$defaulted_loan)
+```
+
+# K-Fold Cross Validation
+## Reading the File
+```{r}
+library(haven)
+bank_loan_df <- read_sav("F:/MDS-Private-Study-Materials/First Semester/Statistical Computing with R/Assignments/Data/P4_bankloan_5000_clients.sav")
+
+```
+
+## Changing the data type of variables
+```{r}
+bank_loan_df$defaulted_loan<-as.factor(bank_loan_df$defaulted_loan)
+bank_loan_df$education_level<-as.factor(bank_loan_df$education_level)
+
+```
+
+## Splitting the data into train and test set
+```{r}
+set.seed(1234)
+library(caret)
+ind<-sample(2,nrow(bank_loan_df),replace=T,prob = c(0.7,0.3))
+train_data<-bank_loan_df[ind==1,]
+test_data<-bank_loan_df[ind==2,]
+
+
+```
+
+## Setting Up the Train Control
+```{r}
+cv_train_control<-trainControl(method = "cv",number = 10)
+```
+
+## Logistic Regression With Cross Validation
+## Training Logistic Regression Model
+```{r}
+logistic_clf1<-train(defaulted_loan~.,
+ data=train_data,
+ method="glm",
+ family="binomial",
+ trControl=cv_train_control
+ )
+ summary(logistic_clf1)
+
+
+```
+## Making the Prediction
+```{r}
+predicted_val_log1<-predict(logistic_clf1,newdata = test_data)
+```
+
+## Confusion Matrix for Evaluation
+```{r}
+confusionMatrix(predicted_val_log1,test_data$defaulted_loan)
+```
+## KNN Model with Cross validation
+## Training KNN Model
+```{r}
+knn_clf1<-train(defaulted_loan~.,data = train_data,
+ method="knn",
+ trControl=cv_train_control
+ )
+
+```
+
+## Getting the Result of the Model
+```{r}
+knn_clf1$result
+```
+
+## Confusion Matrix for Model Evaluation
+```{r}
+predicted_val_knn1<-predict(knn_clf1,newdata = test_data)
+confusionMatrix(predicted_val_knn1,test_data$defaulted_loan)
+
+```
+# Naïve Bayes classifier
+## Training the Model
+```{r}
+library(naivebayes)
+```
+```{r}
+nb_clf1<-train(defaulted_loan~.,
+ data=train_data,
+ method="naive_bayes",
+ usepoisson = TRUE,
+ trControl=cv_train_control
+ )
+summary(nb_clf1)
+
+```
+##  Making Prediction on Test Data
+```{r}
+predicted_val_nb1<-predict(nb_clf1,newdata = test_data)
+```
+
+## Confusion Matrix for Model Evaluation
+```{r}
+confusionMatrix(predicted_val_nb1,test_data$defaulted_loan)
+```
+# Support Vector Machine (SVM) Model
+## Training the Model
+```{r}
+#svm_clf1<-train(defaulted_loan~.,
+#data=train_data,
+#method="svmLinear",
+#trControl=cv_train_control,
+ #)
+#svm_clf1
+
+```
+
+# Making the Prediction for test data
+```{r}
+# predicted_val_svm1<-predict(svm_clf1,newdata = test_data)
+```
+
+# Confusion Matrix for Model Evaluation
+```{r}
+# confusionMatrix(predicted_val_svm1,test_data$defaulted_loan)
+```
+# Decision Tree Model
+```{r}
+#dtree_clf1<-train(defaulted_loan~.,
+#data = train_data,
+#method="rpart",
+#parms = list(split = "information"),
+#tuneLength=10,
+#trControl=cv_train_control
+ #)
+ #dtree_clf1
+
+```
+
+# Making the Prediction for test data
+```{r}
+#predicted_val_dtree1<-predict(dtree_clf1,newdata = test_data)
+```
+# Confusion Matrix for Model Evaluation
+```{r}
+#confusionMatrix(predicted_val_dtree1,test_data$defaulted_loan)
+```
+
+# Artifical Neural Network (ANN) Model
+## Training the Model
+```{r}
+#ann_clf1 <- train(defaulted_loan ~ ., data = train_data, 
+#method = "nnet",
+# preProcess = c("center","scale"), 
+#maxit = 250, # Maximum number of iterations
+ #tuneGrid = data.frame(size = 1, decay = 0),
+ # tuneGrid = data.frame(size = 0, decay = 0),skip=TRUE, # Technically, this is log-reg
+#metric = "Accuracy",
+ #trControl=cv_train_control)
+
+```
+
+# Making the Predictions for Test data
+
+```{r}
+# predicted_val_ann1<-predict(ann_clf1,newdata = test_data)
+```
+
+# Confusion Matrix for the Model Evaluation
+```{r}
+# confusionMatrix(predicted_val_ann1,test_data$defaulted_loan)
+```
+
+# Repeated K-Fold Cross Validation
+# Setting Up the Train Control
+```{r}
+#rep_cv_train_control<-trainControl(method = "repeatedcv",number = 10,repeats = 3)
+```
+## Logistic Regression With Repeated Cross Validation
+## Training Logistic Regression Model
+```{r}
+#logistic_clf1<-train(defaulted_loan~.,
+# data=train_data,
+# method="glm",
+ #family="binomial",
+ #trControl=rep_cv_train_control
+ #)
+ #summary(logistic_clf1)
+
+```
+
+## Making the Prediction
+```{r}
+#predicted_val_log1<-predict(logistic_clf1,newdata = test_data)
+```
+
+## Confusion Matrix for Evaluation
+```{r}
+#confusionMatrix(predicted_val_log1,test_data$defaulted_loan)
+```
+## KNN Model with Repeated Cross validation
+## Training KNN Model
+```{r}
+#knn_clf1<-train(defaulted_loan~.,data = train_data,
+# method="knn",
+ #trControl=rep_cv_train_control
+ #)
+
+```
+
+## Getting the Result of the Model
+```{r}
+#knn_clf1$result
+```
+
+## Confusion Matrix for Model Evaluation
+```{r}
+#predicted_val_knn1<-predict(knn_clf1,newdata = test_data)
+#confusionMatrix(predicted_val_knn1,test_data$defaulted_loan)
+
+```
+
+## Naïve Bayes classifier
+## Training the Model
+```{r}
+#library(naivebayes)
+```
+```{r}
+#nb_clf1<-train(defaulted_loan~.,
+ #data=train_data,
+ #method="naive_bayes",
+ #usepoisson = TRUE,
+ #trControl=rep_cv_train_control
+ #)
+#summary(nb_clf1)
+
+```
+
+## Making Prediction on Test Data
+```{r}
+#predicted_val_nb1<-predict(nb_clf1,newdata = test_data)
+
+```
+
+## Confusion Matrix for Model Evaluation
+
+```{r}
+#confusionMatrix(predicted_val_nb1,test_data$defaulted_loan)
+```
+
+## Support Vector Machine (SVM) Model
+## Training the model
+```{r}
+#svm_clf1<-train(defaulted_loan~.,
+ #data=train_data,
+ #method="svmLinear",
+ #trControl=rep_cv_train_control,
+ #)
+#svm_clf1
+
+```
+## Making the Prediction for test data
+```{r}
+#predicted_val_svm1<-predict(svm_clf1,newdata = test_data)
+```
+
+## Confusion Matrix for Model Evaluation
+```{r}
+#confusionMatrix(predicted_val_svm1,test_data$defaulted_loan)
+```
+## Decision Tree Model
+```{r}
+#dtree_clf1<-train(defaulted_loan~.,
+ #data = train_data,
+ #method="rpart",
+ #parms = list(split = "information"),
+ #tuneLength=10,
+ #trControl=rep_cv_train_control
+ #)
+#dtree_clf1
+
+```
+
+## Making the Prediction for test data
+
+```{r}
+ #predicted_val_dtree1<-predict(dtree_clf1,newdata = test_data)
+```
+## Confusion Matrix for Model Evaluation
+
+```{r}
+# confusionMatrix(predicted_val_dtree1,test_data$defaulted_loan)
+```
+
+## Artifical Neural Network (ANN) Model
+## Training the Model
+```{r}
+#ann_clf1 <- train(defaulted_loan ~ ., data = train_data, 
+#method = "nnet",
+#preProcess = c("center","scale"), 
+#maxit = 250, # Maximum number of iterations
+# tuneGrid = data.frame(size = 1, decay = 0),
+ # tuneGrid = data.frame(size = 0, decay = 0),skip=TRUE, # Technically, this is log-reg
+ #metric = "Accuracy",
+ #trControl=rep_cv_train_control)
+
+```
+## Making the Predictions for Test data
+```{r}
+#predicted_val_ann1<-predict(ann_clf1,newdata = test_data)
+```
+
+## Confusion Matrix for the Model Evaluation
+```{r}
+#confusionMatrix(predicted_val_ann1,test_data$defaulted_loan)
+```
+
+## Bagging, Boosting and Random Forest
+## Reading the File
+```{r}
+library(haven)
+bank_loan_df <- read_sav("F:/MDS-Private-Study-Materials/First Semester/Statistical Computing with R/Assignments/Data/P4_bankloan_5000_clients.sav")
+bank_loan_df$defaulted_loan<-as.factor(bank_loan_df$defaulted_loan)
+bank_loan_df$education_level<-as.factor(bank_loan_df$education_level)
+
+```
+
+## Splitting the data into train and test set
+```{r}
+set.seed(1234)
+ library(caret)
+## Loading required package: ggplot2
+## Loading required package: lattice
+ind<-sample(2,nrow(bank_loan_df),replace=T,prob = c(0.7,0.3))
+ train_data<-bank_loan_df[ind==1,]
+ test_data<-bank_loan_df[ind==2,]
+
+```
+## Bagging Model
+## Training the Model
+```{r}
+library("ipred")
+ bag_dtree_clf<-bagging(defaulted_loan~.,
+ data = train_data,
+ coob=T
+ )
+print(bag_dtree_clf)
+
+```
+## Making the Prediction
+```{r}
+predicted_bag_tree<-predict(bag_dtree_clf,newdata = test_data)
+library(caret)
+ confusionMatrix(predicted_bag_tree,test_data$defaulted_loan)
+
+
+```
+## Random Forest Model
+## Training the Model
+```{r}
+set.seed(1234)
+library(randomForest)
+rf_clf<-randomForest(defaulted_loan~.,
+ data = train_data)
+rf_clf
+
+
+
+```
+## Making the Prediction
+
+```{r}
+predicted_rf<-predict(rf_clf,newdata = test_data)
+confusionMatrix(predicted_rf,test_data$defaulted_loan)
+
+
+```
+## Extreme Gradient Boosting
+## Training the Model
+```{r}
+#xglm_clf<-train(defaulted_loan~.,
+ #data = train_data,
+ #method="xgbTree",
+ #verbose=F
+# )
+
+
+```
+## Making the Prediction
+```{r}
+#predicted_xgb<-predict(xglm_clf,newdata = test_data)
+#confusionMatrix(predicted_xgb,test_data$defaulted_loan)
+
+
+```
+
+
