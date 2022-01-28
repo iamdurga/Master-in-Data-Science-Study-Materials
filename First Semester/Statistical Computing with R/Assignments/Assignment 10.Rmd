@@ -1,0 +1,150 @@
+---
+title: "Assignment 10"
+author: "Durga Pokharel"
+date: "18/01/2022"
+output:
+  word_document: default
+  html_document: default
+  pdf_document: default
+School/University: School of Mathematical Science, Tribhuvan University, Nepal
+Roll.no: '11'
+Cource Name: Statistical Computing with R(MDS 503)
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#[Q.N.1] Create two quantitative variables: age and body-mass index (BMI) with random samples of size 1000 each:
+     * Age: 0 to 99 (random samples)
+     * BMI: 10 to 40 (random samples)
+     
+`Age`
+
+```{r cars}
+age <- sample(0:99,size = 1000, replace =T)
+
+
+```
+
+`BMI`
+```{r}
+bmi <- sample(10:40, size = 1000, replace = T)
+```
+
+# [Q.N.2] Create a binary variable sex (1=Male and 0=Female) of 1000 random samples
+
+
+```{r pressure, echo=FALSE}
+sex <- rep(c(0,1),1000,repace=T)
+
+
+```
+# [Q.N.3] Create a data frame as df containing four variables/features:Serial Number, BMI, Age and Sex
+
+```{r}
+sn <- c(1:1000)
+df <- data.frame(sn,bmi,age,sex)
+head(df)
+```
+
+# [Q.N.4] For replication of the results, use your class roll number as random.seed during analysis
+# [Q.N.5] Split the data into “train” and “test” data using 80-20 partition
+```{r}
+set.seed(11)
+nd = sample(2,nrow(df), replace= T,prob = c(0.8,0.2))
+train_data <- df[nd ==1,]
+test_data <- df[nd==2, ]
+```
+
+# [Q.N,6] Fit a linear regression model with BMI as dependent variable and age and sex and predictors in the train data samples
+
+```{r}
+lm1 <- lm(bmi~.,data = train_data)
+summary(lm1)
+```
+Here p value grater than 0.05. Hence dependent variable normailly distributed. 
+
+# [Q.N.7] Conduct residual analysis of the fitted model with graphs (suggestive) and tests (confirmative)
+
+`Linearity of resudial`
+**Graphical (Suggestive)**
+```{r}
+plot(lm1, which = 1, col= c("blue"))
+```
+
+**Calculation (Confirmative)** 
+```{r}
+summary(lm1$residuals)
+```
+
+`Independence`
+**Graphical (suggestive)**
+```{r}
+acf(lm1$residuals)
+```
+
+**Calculatin(Confirmative)**
+```{r,message=FALSE}
+library(car)
+durbinWatsonTest(lm1)
+```
+
+`Normality of Residuals`
+**Graphical(suggestive)**
+```{r}
+plot(lm1, which = 2, col = c("blue"))
+```
+**Calculation(Confirmative)**
+```{r}
+shapiro.test(lm1$residuals)
+```
+
+
+`Equal Variance `
+**Graphical(Suggestive)**
+```{r}
+plot(lm1,which = 3, col= c("blue"))
+```
+
+
+**Calculation(Confirmative)**
+```{r, message=FALSE}
+library(lmtest)
+bptest(lm1)
+```
+# [Q.N.8] Use the fitted model to predict the random test data samples
+```{r}
+pred <- predict(lm1, data = test_data)
+length(pred)
+```
+
+
+```{r}
+length(test_data$bmi)
+```
+
+# [Q.N.9] Get R-square, MSE and RMSE for training as well as test data and interpret them carefully
+
+
+```{r, message=FALSE}
+library('caret')
+data.frame(R2 = R2(pred, 
+train_data$bmi),
+RMSE = RMSE(pred, 
+train_data$bmi),
+MAE = MAE(pred, 
+train_data$bmi))
+
+
+
+```
+
+
+From this value of r-square only 0.45% data fit the regression model. Which is actually low. Similarly values for RMSE and MAE is respectively 8.909007 and 7.745684. It is better to have low error. Also, I have tried to get value of R2, RMSE and MAE for test data I got error `Error in cor(obs, pred, use = ifelse(na.rm, "complete.obs", "everything")) : 
+incompatible dimensions` I tried to solve but I could not able.
+
+
+
+
+
