@@ -1,0 +1,241 @@
+---
+title: "Final Exam Answersheet"
+author: "Durga Pokharel"
+date: "13/03/2022"
+output:
+  pdf_document: default
+  html_document: default
+---
+# Group(B)
+
+# [Q.N.6]
+
+```{r}
+#a.
+mpg <- c(sample(10:50,size = 500,replace = T))
+
+
+#b
+hist(table(mpg))
+
+```
+From histogram we see that maximum value is greater than 12 most of the value behind max value have same frequency.
+c.
+```{r}
+hist(table(mpg),col="blue",bin= 8)
+```
+#c
+```{r}
+hist(table(mpg),col="blue",bin= 8)
+abline(v= mean(table(mpg)),lwd=2,col="red")
+
+```
+
+# d
+```{r}
+qqnorm(mpg)
+qqline(mpg,col="red")
+```
+Figue show that our data is not normally distrubated. Actual value and observed value are far from each others.
+# e
+```{r}
+dens <- density(mpg)
+plot(dens, frame=FALSE, col= "yellow")
+polygon(dens, col = "yellow")
+```
+Density plot also shows that our data is not normally distribuated. We could not saw bell shape curve.
+
+# [Q.N.7]
+
+#a
+```{r}
+set.seed(11)
+mpg <- sample(10:50, size = 100, replace =T)
+gear <- sample(3:5,size=100, replace =T)
+df <- data.frame(mpg,gear)
+
+
+```
+
+# b.
+To perform goodnessof fit we need to check normality and is independant variables and depandent variables variance is equal we can do it in following way.
+```{r}
+with(df,shapiro.test(mpg[gear==3]))
+
+
+```
+Here p value is less than 0.05 hence it does not follow normal distrbution.
+```{r}
+with(df,shapiro.test(mpg[gear==4]))
+```
+Here P value is greater than 0.05 hence it follow normal distribution.
+```{r}
+with(df,shapiro.test(mpg[gear==5]))
+```
+Here P value also greater than 0.05 hence it follows normal distribution.
+
+In our data all the three categories of gear did not follow the normal distibution hence it is not normal.
+
+# b.
+To check variance we let's do it. We need to used levene test insted of variance test because we have 3 categories.
+
+```{r}
+library(car)
+leveneTest(mpg~as.factor(gear),data=df)
+
+```
+
+Here p value is greater than 0.05 hence variance between depandent variable mpg and independent variabls gear have equal.
+
+# c
+```{r}
+summary(aov(mpg~gear,data=df))
+```
+Here p value is greater than 0.05 hence h0 accepted. That means means across category is same hence we do not need to do post hoic test.
+#e.
+No, can not used this test for data to used it in to our data dependent variable should always follow normal distibution but above data did not satisfy the normality test.
+
+
+# [Q.N.8]
+
+#a.
+```{r}
+set.seed(11)
+mpg <- sample(10:50,size= 200, replace = T)
+am <- sample(0:1,size= 200, replace = T)
+wt <- sample(1:10,size=200,replace = T)
+hp <- sample(125:400,size=200, replace=T)
+df <-data.frame(mpg,am,wt,hp)
+
+```
+# b
+```{r}
+set.seed(11)
+ind <- sample(2,nrow(df), replace = T, prob = c(0.7,0.3))
+train_data <- df[ind==1,]
+test_data <- df[ind==2,]
+
+```
+#c 
+I fit the linear model using mpg as dependent variable.
+```{r}
+model <- lm(mpg~wt,data= train_data)
+
+```
+#d 
+```{r}
+library(caret)
+set.seed(11)
+ind <- sample(2,nrow(df), replace = T, prob = c(0.7,0.3))
+train_data <- df[ind==1,]
+test_data <- df[ind==2,]
+pred <- predict(model,test_data)
+R2 <- R2(pred, test_data$mpg)
+R2
+
+RMSE <- RMSE(pred, test_data$mpg)
+RMSE
+
+```
+Here cofficent of determination is only 0.026. That is only 2.6% of variablity explain by independent variable. To do BLUE test it should have R2 greater than 50% independent variable and dependent variable must be normal and value of a and b are significant. Anova must be valid. It did not satisfied condition of blue test.
+
+#e.
+```{r}
+pred <- predict(model,test_data)
+pred
+
+
+```
+
+
+
+# [Q.N.9]
+
+#a.
+```{r}
+set.seed(11)
+mpg <-sample(10:50, size = 300, replace = T)
+am <- sample(0:1,size = 300, replace = T)
+wt <- sample(0:10,size=300, replace = T)
+hp <- sample(125:400,size=300, replace = T)
+df <- data.frame(mpg, am,wt,hp)
+
+```
+
+#b
+```{r}
+set.seed(11)
+ind <- sample(2, nrow(df), replace = T, prob=c(0.8,0.2))
+train <- df[ind==1,]
+test <- df[ind==2,]
+
+```
+
+#c 
+
+```{r, warning=FALSE}
+log.mod <- train(am~., data= train,methods= "glm", family= "binomial")
+
+```
+#d.
+
+```{r}
+library(caret)
+pred <- predict(log.mod,test)
+pred
+```
+#e .
+```{r}
+library(caret)
+
+#confusionMatrix(pred, data= test$am)
+
+```
+e numbers question code could not run in my R studio so, inorder to knit it I comment it In above chunck.
+
+# [Q.N.10]
+
+#a.
+```{r}
+data <- mtcars
+head(data)
+```
+
+Using head function we can get top 6 row of data frame. In above result we can see the top 6 row together with all columns of mtcars data frame.
+
+```{r}
+str(data)
+```
+Function `str` check the data type of variables present in the table. Here we can see all the data type of variable is numerical.
+
+#b
+
+```{r}
+pca1 <- prcomp(data)
+pca1
+
+```
+
+Here, 11 components of pca  are seen. There are respectively from PC1 to PC11.
+
+#d
+```{r}
+biplot(pca1, lavels= rownames(data))
+```
+
+#e
+```{r}
+library(psych)
+fa1 <- psych::principal(data, nfactors = 3, rotate = "varimax")
+biplot(fa1, labels = rownames(fa1))
+```
+
+Here, we can see biplot RC2 in the top and RC3 in to second row and RC1 in last row. PCA obtained from `VARIMAX` in not true pca.
+
+
+
+
+
+
+
+

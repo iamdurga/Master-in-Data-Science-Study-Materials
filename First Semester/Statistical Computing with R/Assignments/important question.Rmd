@@ -1,0 +1,63 @@
+---
+title: "Important question"
+author: "Durga Pokharel"
+date: "12/03/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+roll <- function() {
+  die <- 1:6
+  dice <- sample(die,size=2,replace = TRUE)
+  sum(dice)
+}
+roll()
+roll()
+roll()
+
+
+roll2 <- function(dice= 1:6){
+  die <- sample(dice,size=2,replace = TRUE)
+  sum(dice)
+}
+roll2()
+roll2()
+roll2()
+
+
+roll3 <- function(dice){
+  dice<-sample(dice,size = 2,replace = TRUE)
+  sum(dice)
+}
+
+roll3(dice=1:6)
+roll3(dice = 1:12)
+roll3(dice = 1:24)
+```
+```{r}
+
+library(readxl)
+data <- read_excel("F:/MDS-Private-Study-Materials/First Semester/Statistical Computing with R/Assignments/Data/covid_tbl_final.xlsx")
+str(data)
+
+head(data)
+
+names(data) <- paste(names(data),data[1,],sep="")
+data= data[-1,]
+data= data[,-14]
+names(data)[names(data)=="Date_Date"]= "Date"
+names(data)[names(data)=="Confirmed cases_New"]= "Confirmed_Cases_New"
+
+data$Confirmed_Cases_New = gsub('[+]',"",data$Confirmed_Cases_New)
+```
+
+
+```{r}
+
+```
+
+

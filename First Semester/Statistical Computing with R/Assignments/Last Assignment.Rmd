@@ -3,8 +3,12 @@ title: "Assignment 10"
 author: "Durga Pokharel"
 date: "Last compiled on `r format(Sys.time(), '%c')`"
 output:
-  html_document: default
+  md_document: 
+    variant: markdown_github
+  
   word_document: default
+  html_document: default
+  
 instructor: Assoc. Prof. Shital Bhandary
 school: School of Mathematical Sciences, Tribhuvan University, Nepal
 roll: 11
@@ -12,7 +16,7 @@ course: 'Statistical Computing with R: MDS 503'
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, message = FALSE)
+knitr::opts_chunk$set(echo = TRUE, message = FALSE,error = TRUE)
 ```
 
 ## 1. For Replication setting Roll Number as random seed

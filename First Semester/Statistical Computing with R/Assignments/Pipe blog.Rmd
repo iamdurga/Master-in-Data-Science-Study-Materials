@@ -1,0 +1,194 @@
+---
+title: "Pipe"
+author: "Durga Pokharel"
+date: "02/12/2021"
+always_allow_html: true
+output:
+  md_document:
+    variant: markdown_github
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+```{r}
+library(magrittr)
+```
+
+# Data Analysis Using Pipe Operator in R
+
+## What is pipe oprator
+Pipe operator are a very powerful tool for clearly expresing a sequence of multiple operations. Pipe come from `magrittr` package. Pipe helps us to write code in a way that is easier to read write and understand.
+
+
+## Why to use Pipe
+R is functional language it requeres lots of parenthesis while doing complex programming, this often means we have to nest those parenthesis together for statistical computing. This makes R codes hard to read and understand. In this suitation pipe help us. There are three types of pipe operators. They are,
+
+### %< >% Compound Operator
+Updates values for same variable.
+
+```{r}
+x <- rnorm(100)
+x %<>% abs %>% sort
+x
+```
+Here at first %<>% find absolute values of x and and then it sort in uncreasing order.
+
+### %>% tee Operator
+
+Normally, code ends after plot command but the “tee” pipe operator 
+allows it to continue for the next arguement
+
+```{r}
+set.seed(123) 
+rnorm(200) %>% 
+matrix(ncol = 2) %T>% 
+plot %>% 
+colSums
+```
+
+
+### %$%
+
+This operator is useful when we want to pipe a dataframe which may contains many columns in to a function that is applied to some of the columns.
+
+
+```{r}
+data.frame(z = rnorm(100)) %$%
+ts.plot(z)
+```
+
+
+## let's do some Data Analysis in R's Builtin data iris with Pipe Operator:
+
+First, let's us check what attributes `iris` data contains.
+
+```{r}
+head(iris)
+```
+`iris` data have four columns they are `Sepal.Length,Sepal.Width, Petal.Length ,Petal.Width Species`. 
+
+
+```{r}
+library(dplyr)
+iris %>%
+  select(contains('Sepal')) %>%
+  mutate(Sepal.Area=Sepal.Length * Sepal.Width)
+```
+`contains` function only select those columns which contains **sepal** word. Here we also import `library(dplyr)` dplyr packages is mainly used for data cleaning purpose. It contaims five buitin function they are: 
+
+* select
+
+* filter
+
+* arrange
+ 
+* mutate
+
+These five functions can do majority of data manipulatlation for data analysis task.
+
+In above code mutate function added new column ("Sepal.Area") in the data frame.
+
+```{r}
+iris %>%
+  select(starts_with('Sepal')) %>%
+  filter(Sepal.Length >= 5.0) %>%
+  arrange(Sepal.Length)
+``` 
+By using above code we want to select only those columns which has **Sepal** as prefix and want to filter those values which have values greater than `Sepal.Length >= 5.0` and finally we did arrange in accending order. If we to sort in decending order we simply need to type **desc** inside arrange function as like below.
+
+
+```{r}
+iris %>%
+  select(starts_with('Sepal')) %>%
+  filter(Sepal.Length >= 5.0) %>%
+  arrange(desc(Sepal.Length))
+```
+## Let's try one Different Step:
+
+Let us observer what will come in result if we use `end_with` in place of `starts_with`.
+
+```{r}
+iris %>%
+  select(ends_with('Length')) %>%
+  rowwise() %>%
+  mutate(Length.Diff = Sepal.Length- Petal.Length)
+
+```
+I hope we have observed what new came here. Here, we got prefix as **Length**. It means we got only those columns which has length as it's prefix. Also by using mutate functiin we created new column **Length.Diff**.
+
+## Use `transmute` function 
+
+
+```{r}
+iris %>%
+  select(contains('Sepal'), Species) %>%
+  transmute(Sepal.Area= Sepal.Length * Sepal.Width)
+```
+Here **transmute** funtion only show new columns it hide Sepal.Length and Sepal.Width columns.
+
+## What a difference we observe when we use pipe operator and genral R function: 
+Let us clearify it from code
+
+
+### Using R general function
+
+
+Assign value of x with given column vector
+
+```{r}
+x <- c(0.109, 0.359, 0.63, 0.996, 0.515, 0.142, 0.017, 0.829, 0.907)
+```
+
+Here we want to compute the following with in single line of code,
+
+*  Compute the logarithm of `x`,
+
+*  return suitably lagged and iterated difference
+
+* compute the exponential function and round the result
+
+
+```{r}
+round(exp(diff(log(x))), 1)
+
+```
+Let's to some code using pipe operators.
+
+
+```{r}
+x %>%log() %>%
+  diff() %>%
+  exp()%>%
+  round(1)
+```
+In above pipe come handly because we did not need to nest with lots of parenthesis. Finally we got the same result.
+
+However, there are lots of advantages of pipe operator there are some creteria to use pipe operator. Following are the some of the limitations of pipe operators.
+
+*  Our pipes are longer than (say) ten steps
+
+*  We have multiple inputs or outputs
+
+* We are starting to think about a directed graph with a complex dependency 
+structure
+
+* We're doing internal package development
+
+In above mention cases we do not prefer to use pipe operator.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

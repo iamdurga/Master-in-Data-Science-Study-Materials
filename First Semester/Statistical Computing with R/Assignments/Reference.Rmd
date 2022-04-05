@@ -1,0 +1,98 @@
+---
+title: "Exam question solution"
+author: "Durga Pokharel"
+date: "12/03/2022"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r}
+library(twitteR)
+load("F:/MDS R/rdmTweets.RData")
+
+tweets <- rdmTweets
+
+length(tweets)
+
+strwrap(tweets[[154]]$text,width = 55)
+
+library(tm)
+df<- twListToDF(tweets)
+myCorpus <- Corpus(VectorSource(df$text))
+
+inspect(myCorpus[1:3])
+
+myCorpus <- tm_map(myCorpus,tolower)
+myCorpus <- tm_map(myCorpus,removePunctuation)
+myCorpus <- tm_map(myCorpus,removeNumbers)
+
+inspect(myCorpus[1:3])
+
+removeURL <- function(x)gsub("http[^[:space:]]*","",
+                             x)
+myCorpus <-tm_map(myCorpus,removeURL)
+inspect(myCorpus[1:3])
+
+myStopwords <- setdiff(stopwords("english"),
+                       c("r","big"))
+
+myCorpus <- tm_map(myCorpus, removeWords, myStopwords)
+
+inspect(myCorpus[1:3])
+
+myCorpus <- tm_map(myCorpus,gsub, pattern="miners",replacement="mining")
+strwrap(myCorpus[[154]],width = 55)
+
+#Check Frequent Term
+library(wordcloud)
+library(tm)
+
+
+tdm <- TermDocumentMatrix(myCorpus,
+                          control = list(removePunctuation = TRUE,
+                                         stopwords = TRUE))
+
+freq.terms <- findFreqTerms(tdm, lowfreq = 20)
+freq.terms
+
+findAssocs(tdm,"r",0.1)
+
+```
+```{r}
+load("F:/MDS R/termDocMatrix.rdata")
+data <- termDocMatrix
+library(wordcloud)
+m <- as.matrix(data)
+freq <- sort(rowSums(m),decreasing = T)
+
+wordcloud(words = names(freq),freq=freq,min.freq = 4,random.order = F)
+
+number <- table(freq >10)
+
+library(ggplot2)
+ggplot(as.data.frame(data), aes(number)) + geom_histogram()
+```
+
+
+```{r}
+load("F:/MDS R/termDocMatrix.rdata")
+data <- termDocMatrix
+m <- as.matrix(data)
+termM <- m %*% t(m)
+termM[1:10,1:10]
+library(igraph)
+g <- graph.adjacency(termM,weighted = T,mode = 'undirected')
+g <- simplify(g)
+V(g)$label <- V(g)$name
+V(g)$degree <- degree(g)
+
+hist(V(g)$degree, breaks = 100,col = 'green', main = "Frequency Of Degree", xlab = " Degree of vertices", ylab = " Frequency")
+
+
+```
+

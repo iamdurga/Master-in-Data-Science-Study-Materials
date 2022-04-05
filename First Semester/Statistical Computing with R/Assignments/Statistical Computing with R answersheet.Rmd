@@ -1,0 +1,214 @@
+---
+title: "Second Assesment"
+author: "Durga Pokharel"
+date: "09/02/2022"
+output: html_document
+---
+
+# Group (B)
+## [A.N.1] Prepare a data with 50random observationsand two variables:miles per gallon (mpg) with random range between  10  to  50  and  transmission  (am)  as  random  binary  variable(0=automatic,  1=Manual), do not forget to use your class roll number as random seed to replicate the result
+
+```{r}
+mpg<-c(sample(x=seq(0,99),size=50,replace = TRUE))
+gear<-c(runif(50,min = 10,max = 40))
+
+
+```
+
+
+```{r}
+df<-cbind(mpg,gear)
+
+
+```
+
+
+```{r}
+#to check normality
+shapiro.test(gear, data = df)
+
+```
+
+
+```{r}
+shapiro.test(mpg, data = df)
+```
+
+
+```{r}
+# one sample t-tes
+t.test(df~mpg,mu= 23)
+
+```
+To decide which t-test is best we do varaiance check if variance are equal we use student t test if variance is not equal we used wilch test. 
+
+## Question 7. 
+```{r}
+var.test(df~mpg)
+
+```
+
+## Q.N.7 a)Prepare a data with 100 random observationsand fourvariables: miles per gallon (mpg) with random range between 10 to 50; transmission (am) as random binary variable (0=automatic, 1=Manual), weight (wt) with random range of 1 to 10 and horse power (hp) with random range of 125 and 400, do not forget to use your exam roll number as random seed to replicate the resultb)Divide thisdata into train and test datasets with 70:30 random splitswith your roll number as random seedc)Fit supervised linear regression modeland KNN regression modelon train data with miles per gallon (mpg)as dependent variable and all other variablesas independent variable d)Get the summary of the model, fit indicesand select the best modele)Predict the mpgvariable in the test datawith best model, get fit indicesand interpret the resultscarefully
+```{r}
+set.seed(11)
+mpg <- sample(50,100,100)
+
+
+
+```
+
+
+```{r}
+set.seed(11)
+hp <- sample(50,10,10)
+length(hp)
+
+
+```
+
+
+```{r}
+# Make data frame 
+df <- cbind(mpg, hp)
+
+```
+
+
+```{r}
+ind <- sample(2, nrow(df),replace = T, prob = c(0.7,0.2))
+train<- df[ind==1,]
+test <- df[ind ==2,]
+```
+
+To fit the model
+```{r}
+lm <- lm(mpg~gear, data = train)
+pred <- pred(lm, data = test)
+```
+
+## Q.n.8 a)Prepare a data with 150 observationsand fourvariables: transmission (am) as random binary variable (0=automatic, 1=Manual), miles per gallon (mpg) with random range between 10 to 50; weight (wt) with random range of 1 to10 and horse power (hp) with random range of 125 and 400, do not forget to use your exam roll number as random seed to replicate the resultb)Divide thisdata into train and test datasets with 80:20 random splitswith your roll number as random seedc)Fit supervised binary logistic regression modeland naïve Bayesclassification modelon train data with transmission (am) as dependent variable and miles per gallon(mpg), weight (wt)and horse power (hp)as independent variableand select the best modeld)Predict the transmission variable in the test datausing best modeland interpret the result carefullye)Get the confusion matrix, sensitivity, specificity of the predicted model and interpret them carefully
+```{r}
+set.seed(11)
+tr <- runif(150)
+mpg <- runif(150)
+
+```
+
+
+```{r}
+```
+
+
+```{r}
+df <- cbind(tr,mpg)
+```
+
+
+```{r}
+ind = sample(3, nrow(df),replace = T, prob = c(0.8,0.2))
+train = df[ind==1,]
+test = df[ind==2,]
+```
+
+
+
+
+
+## 9. Do  as  follows  using  “USArrests”  dataset  in  R  studiowith  R  scriptso  that  it  can  be  knitted  as  PDFfor review/grading:a)Check the head and the structure of the datasetandinterpret them carefullyb)Useall thevariables of this dataset in thePrincipal Component Analysis(PCA)to create “criminality score” for the US statesc)Interpret the results of the PCA model carefullyd)Get scree-plotand explainhow many components must beretainede)Get the bi-plot of the fitted model and interpret it carefullyf)Improve the fitted model with VARIMAX process and interpret the results carefully\
+A.
+```{r}
+data("USArrests")
+head(USArrests)
+```
+
+Head function gives top six row of USAarrest data set Where we can found all the column involve in the dataset.
+
+
+```{r}
+str(USArrests)
+
+```
+There are four variables in the dataset in which murder variable is in number similarly Assult is in interger as well as urbanpop is in intiger and rape is in number data structure
+
+```{r}
+library(dplyr)
+USAarrest1 <- USArrests[,-3] %>% scale
+
+
+```
+
+
+```{r}
+(pca <- prcomp(USAarrest1))
+
+
+```
+Here we get 
+
+```{r}
+(var_explane <- pca$Sdev^2/sum(pca$Sdev^2))
+
+```
+
+
+```{r}
+library(ggplot2)
+var_explane <- pca$Sdev^2/sum(pca$Sdev^2)
+qplot(c(1:3),var_explane) + geom_line() + xlab("Principal Component") + 
+  ylab("Variance Explained") + ggtitle("SCree plot") + ylim(0,1) 
+```
+
+
+```{r}
+#biplot
+
+biplot(pca,labels= rownames(USAarrest1))
+
+```
+10 Do as follows in the R Studio with R Script so that it can be knitted as PDFfor review/grading:
+a)Define a 2-column matrix “x” with 50 normally distributed random observationsforeachcolumn, do not forget to set random seed as your roll numberfor replicationb)Assign the first 25 observation of the “x”matrix data as “1”and next 25 observation as “2”of a new columnof this matrixc)
+
+Fit a k-means clustering model in the “x”matrix data with k=2 and nstart = 20d)Fit a k-means clustering model in the “x”matrix data with k=3 and nstart = 20e)Plot the clusters formed by k=2 and k=3, compare the resultsand interpret them carefully 
+f)Visualize the clusters for best kvalueand interpret it carefully
+
+```{r}
+set.seed(11)
+x <- runif(50)
+x <- as.data.frame(x)
+ind <- sample(2, nrow(x), replace = T, prob = c(0.5, 0.5))
+train <- x[ind==1,]
+test <- x[ind==2,]
+
+```
+
+
+```{r}
+library(ClusterR)
+library(cluster)
+set.seed(11)
+x <- runif(50)
+x <- as.data.frame(x)
+ind <- sample(2, nrow(x), replace = T, prob = c(0.5, 0.5))
+train <- x[ind==1,]
+test <- x[ind==2,]
+k_model <- kmeans(train, centers = 2, nstart = 20)
+#str(knn_model)
+
+
+```
+
+
+```{r}
+set.seed(11)
+x <- runif(50)
+x <- as.data.frame(x)
+ind <- sample(2, nrow(x), replace = T, prob = c(0.5, 0.5))
+train <- x[ind==1,]
+test <- x[ind==2,]
+k_model2 <- kmeans(train, centers = 3, nstart = 25)
+```
+
+
+```{r}
+```
+

@@ -2,7 +2,9 @@
 title: "Project 4"
 author: "Durga Pokharel"
 date: "05/01/2022"
-output: word_document
+output: 
+  md_document:
+    variant: markdown_github
 ---
 
 ```{r setup, include=FALSE}

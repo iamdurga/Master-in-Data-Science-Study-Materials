@@ -1,8 +1,9 @@
 ---
-title: "Assignment 8"
+title: "Assignment 9"
 author: "Durga Pokharel"
 date: "04/01/2022"
 output:
+  pdf_document: default
   word_document: default
   html_document: default
 ---
@@ -129,6 +130,13 @@ mtcars.subset<-mtcars[, 1:2] %>% scale
 text(cars.mds.2d, pos = 4, labels = rownames(mtcars.subset), col = "tomato")
 ```
 Hornet 4 Drive, Pontiac Fire bird etc lies on the positive orthant which means they have positive contribution to the first and second components. However, Lotus Europa and Ferari has opposite but highest weight component 1 and component 2.
+
+```{r}
+#r <- 1,2,3
+#print()
+```
+
+
 
 # [Q.N.17] Fit classical multi-dimensional scaling model with the mtcars.dist in 3-dimensional state as cars.mds.3d 
 ```{r}

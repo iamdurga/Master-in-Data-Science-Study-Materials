@@ -1,0 +1,191 @@
+---
+title: "Polynomial Regression"
+author: "Durga Pokharel"
+date: "02/12/2021"
+always_allow_html: true
+output: 
+  md_document:
+    variant: markdown_github
+  
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Polynomial Regression
+
+Curve fitting or curve-linear regression are additional words for the same thing. It is used when a scatterplot shows a non-linear relationship. It's most typically employed with time series data, but it can be applied to a variety of other situations.
+
+## Let’s use the Nepal Covid data and fit a polynomial models on Covid deaths using R
+
+To do this first import excel file in R studio using `readxl` library. Like below.
+
+
+```{r}
+library(readxl)
+data <- read_excel("F:/MDS-Private-Study-Materials/First Semester/Statistical Computing with R/Assignments/Data/covid_tbl_final.xlsx")
+head(data)
+
+```
+
+`head()` function return top 6 rows of dataframe along with all columns. 
+
+```{r}
+str(data)
+```
+
+The'str()' method examines each column's data type. The data type number for Confirmed cases total is the same as the data type number for the other columns.
+
+## Let us plot the daily deaths by date and see what is causing the problem
+
+```{r}
+plot(data$Date,data$Deaths_daily, main= "Daily Deaths:23jan 2020-31 may 2021 ",xlab = "Date",
+  ylab = "Daily Deaths"   )
+```
+The problem is associated with the three outliers (all the missed deaths a priori added to the data on those 3 days!)
+
+## Let us plot the cumulative deaths again before these outliers i.e. till 23 Feb 2021
+
+```{r}
+plot.data <- data[data$SN <= 398,]
+plot(plot.data$Date, plot.data$Deaths_total,
+     main= "Daily Covid Deaths,Nepal:23 jan-23 feb2021",
+     xlab= "Date",
+     ylab= "Daily Deaths")
+```
+As a result, we eliminate outliers. Our data is now ready to be fitted into a model. Let's divide our model into a train set and a test set in the proportions of 70% to 30%.
+
+```{r}
+set.seed(132)
+ind <- sample(2, nrow(plot.data), replace = T, prob = c(0.7,0.3))
+train_data <- plot.data[ind==1,]
+test_data <- plot.data[ind==2,]
+```
+
+`seed()` function in R is used to reproduce results i.e. it produces the same sample again and again. When we generate randoms numbers without set. `seed()` function it will produce different samples at different time of execution.
+
+## Let us fit a linear model in the filtered data (plot.data) using SN as time variable
+
+```{r}
+library(caret)
+lm1 <- lm(plot.data$Deaths_total~plot.data$SN, 
+         data= train_data)
+```
+
+Using the caret package, we fit a linear model to the covid data. Let's make a prediction based on the test data.
+
+Before calculating the linear model summary, it is necessary to master some concepts in order to comprehend the summary.
+
+`Coefficent of Determination` :
+
+The coefficient of determination is a statistical measurement that examines how differences in one variable can be explained by the difference in a second variable.
+Higher the value of R square better will be the model.
+
+`Residual Standard Error`:
+
+The residual standard error is used to measure how well a regression model fits a dataset. Lower the value of residual standard error better will be the model.
+
+```{r}
+summary(lm1)
+```
+When we fit a linear model, we get an R2 of 79.21%, which suggests that only 79.21% of the variance is explained by independent factors in relation to dependent variables. On 396 degrees of freedom, the value of residual standard error is 350.
+
+## Let's plot the linear model
+
+```{r warning=FALSE}
+plot(plot.data$SN, plot.data$Deaths_total, data= plot.data,
+     main= "Daily Covid Deaths,Nepal:23 jan-23 feb2021",
+     xlab= "Date",
+     ylab= "Daily Deaths")
+abline(lm(plot.data$Deaths_total~plot.data$SN,data= plot.data), col="red",lwd=2)
+
+```
+
+## Let us fit a quadratic linear model in the filtered data 
+
+```{r}
+qlm <- lm(plot.data$Deaths_total~ poly(plot.data$SN,2), data= train_data)
+summary(qlm)
+```
+The value of R2 96.92 percent was obtained in this case. In terms of dependent variables, independent factors account for 96.92 percent of variability. Similarly, the residual standard error on 395 degrees of freedom is 134.9. In comparison to the linear model, we can see that the R2 value is increasing and the error is decreasing.
+
+## Let's plot the quardatic model
+
+```{r}
+plot(plot.data$SN, plot.data$Deaths_total, data= plot.data,
+     main= "Daily Covid Deaths,Nepal:23 jan-23 feb2021",
+     xlab= "Date",
+     ylab= "Daily Deaths")
+lines(fitted(qlm)~SN, data=plot.data, col= "red",lwd=2)
+
+```
+Quardatic model fited data more welly than linear model.
+
+## Let's Fit Cubic Model
+
+We fit the cubic model in the following way.
+
+```{r}
+clm <- lm(plot.data$Deaths_total~poly(SN,3), data= plot.data)
+
+
+```
+
+Let's calculate the summary of cubic model and observed what changes came,
+
+```{r}
+summary(clm)
+
+```
+The R-square value is 96.99 percent, and the residual standard error is 133.6. When we compare the prior model to this one, we can immediately see the differences.
+
+## Let's Plot the Cubic Model
+
+```{r}
+plot(plot.data$SN, plot.data$Deaths_total, data= plot.data,
+     main= "Daily Covid Deaths,Nepal:23 jan-23 feb2021",
+     xlab= "Date",
+     ylab= "Daily Deaths")
+lines(fitted(clm)~plot.data$SN,data = plot.data, col= "red",lwd= 2)
+```
+From figure we can see that predicted model and actual model are more closure than in case of quardatic model.
+
+## Let's Fit Double Quardatic Model
+
+```{r}
+dlm <- lm(plot.data$Deaths_total~poly(plot.data$SN,4))
+
+```
+
+Let's calculate the summary of it.
+
+```{r}
+summary(dlm)
+
+```
+In this scenario, the independent variables have a 99.34 percent variability with respect to the dependent variable. In addition, the residual standard error is 62.45, which is half of the cubic model's.
+
+## Let's fit the Double Quardatic Model
+```{r}
+plot(plot.data$SN, plot.data$Deaths_total, data= plot.data,
+     main= "Daily Covid Deaths,Nepal:23 jan-23 feb2021",
+     xlab= "Date",
+     ylab= "Daily Deaths")
+lines(fitted(dlm)~plot.data$SN,data = plot.data, col= "red",lwd= 2)
+```
+Here both the model are near to overlap 
+
+## Let's Plot Fifth Order Ploynomial
+
+```{r}
+flm <- lm(plot.data$Deaths_total~poly(plot.data$SN,5),data= plot.data)
+```
+
+Let's calculate the summary of flm to see the value of R square and residual standard error.
+
+```{r}
+summary(flm)
+```
+In this case, the residual error is approximately half that of the double quardatic model, and the R square is 99.98 percent. Our model performs better than the previous one since we used a higher order ploynomial. As a result, higher order polynomial models are preferred since they reduce error and improve model accuracy.
+

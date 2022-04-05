@@ -39,6 +39,7 @@ bmi <- sample(10:40, size = 1000, replace = T)
 sex <- rep(c(0,1),1000,repace=T)
 
 
+
 ```
 # [Q.N.3] Create a data frame as df containing four variables/features:Serial Number, BMI, Age and Sex
 

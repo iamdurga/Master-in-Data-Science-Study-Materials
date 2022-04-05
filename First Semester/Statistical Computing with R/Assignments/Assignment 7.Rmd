@@ -2,7 +2,9 @@
 title: "Assignment 6"
 author: "Durga Pokharel"
 date: "24/12/2021"
-output: html_document
+output: 
+  md_document:
+    variant: markdown_github
 ---
 
 # Q.N.1.

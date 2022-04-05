@@ -76,6 +76,10 @@ AdultUCI[[ "age"]] <- ordered(cut(AdultUCI[[ "age"]], c(15,25,45,65,100)),
 labels = c("Young", "Middle-aged", "Senior", "Old"))
 
 
+
+
+
+
 ```
 Initially our age variable is in int data type.Here we changed the age variable in four order factors like `Young`, `Middle-age`, `Senior`,`Old`.
 
@@ -86,6 +90,9 @@ Initially our age variable is in int data type.Here we changed the age variable 
 AdultUCI[[ "hours-per-week"]] <- ordered(cut(AdultUCI[[ "hours-per-week"]],
 c(0,25,40,60,168)),
 labels = c("Part-time", "Full-time", "Over-time", "Workaholic"))
+
+
+
 
 ```
 

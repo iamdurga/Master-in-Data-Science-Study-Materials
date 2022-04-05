@@ -1,0 +1,344 @@
+---
+title: "Untitled"
+author: "Durga Pokharel"
+date: "02/12/2021"
+output: 
+  md_document:
+    variant: markdown_github
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+# Social Network Analysis
+## Defination
+Social networks are simply networks of social interactions and personal relationships. Think about our group of friends and how we got to know them. 
+Maybe we met them while our from our schooling, or maybe we met them through a hobby or through our community. In fact, 72% of all Internet users are
+active on social media today, indulging in social interactions and
+developing personal relationships. However to understhand about social networks we only don't need to go through internet or social media they may  come in variety of form in our daily life.
+
+## Social Network Analysis
+ 
+ Social network analysis (SNA), also known as network science, is a field of
+data analytics that uses networks and graph theory to understand social
+structures. We can see network around us such as road network, online network, network of social media such as facebook, 
+twitter etc. Learning SNA give us to explore insight of various data sources.
+
+## SNA Graph
+We all are familier about the graph which simply the collection of non sero vertex and edge. In order to build SNA graphs, two
+key components are required actors and relationships. Here actors represents the vertex and relationship means the edge between two actors. Let us write SNA graph in R code.
+To do this at first we should have `igraph` package already install in our R or R studio.
+
+```{r}
+library(igraph)
+g <- graph(c(1,2))
+plot(g)
+
+
+```
+In figure we can see the directed graph from node 1 to node 2. From above graph it is also clear that by default it produced directed graph.
+In above figure we can not clearly see node and edge so let's increase its size and give different color to the node.
+
+```{r}
+plot(g,
+vertex.color = 'green',
+vertex.size = 40,
+edge.color ='red',
+edge.size = 20)
+
+```
+Now we change the node color and node font size. Add more node on graph foe this we follow the following code.
+
+```{r}
+g <- graph(c(1,2,2,3,3,4,4,1))
+plot(g,
+     vertex.color = 'green',
+     vertex.size =40,
+     edge.color = 'red',
+     edge.size = 20)
+```
+We got the graph with four vertex 1,2,3,4. Here we also got directed graph. Let's make it for this we need to write directed is false.
+
+```{r}
+g <- graph(c(1,2,2,3,3,4,4,1),directed = FALSE)
+plot(g,
+     vertex.color = 'green',
+     vertex.size =40,
+     edge.color = 'red',
+     edge.size = 20)
+```
+We got our desirable type of graph. Now let's move forword. We can give the number of vertex with out writing them for this look following code.
+```{r}
+g <- graph(c(1,2,2,3,3,4,4,1), 
+directed = F, n=7)
+plot(g,
+     vertex.color = 'green',
+     vertex.size =40,
+     edge.color = 'red',
+     edge.size = 20)
+
+```
+In above graph we give seven vertex number among them we see three isolated nodes. 
+The reason to come isolated node is that we do not specify the edge or relationship between them.
+Also from graph we can make sence that this is not directed  graph.
+
+## Adjacency Matrix
+Let see what will happen if we type only `g[]`.
+```{r}
+g[]
+```
+This give us the 7cross 7 adjacency matrix. Adjancency matrix is matix where we give 1 if if there is edge between two vertex 
+if not then we give 0. But in above matrix it give simply `.` instead of zero. 
+
+Let us try to build our graph by keeping text data in place of number.
+
+```{r}
+g1 <-
+graph(c("Binu","Binita","Binita","Rita"
+,"Rita","Binu","Binu","Rita", "Anju", 
+"Binita"))
+plot(g1,
+vertex.color = "green",
+vertex.size = 40,
+edge.color = "red",
+edge.size = 5)
+```
+If we want to check the features of g1 we simply type g1 and press control and entre key we got following output.
+```{r}
+g1
+```
+It show that in graph there are 4 nodes 5 edges. And edges are directed from `Binu  ->Binita, Binita->Rita, Rita  ->Binu, Binu  ->Rita, Anju  ->Binita`.
+
+## Degree
+Let's check the degree of graph g1. To check degree  we can do `degree(g1)` or `degree(g1, mode='all')`.
+
+```{r}
+degree(g1) 
+```
+Degree of Binu is 3 similarly Anju has degree 1. Also degree means numbers of connection to each node.
+
+```{r}
+degree(g1, mode='all')
+```
+
+## Diameter
+Now, let's check the diameter of graph.
+
+
+```{r}
+diameter(g1, directed = F, weights = 
+NA)
+```
+We got two diameter. Diameter means  number of 
+edged inside and outside of SND. i.e `Anju <- Binita <- Rita`, `Anju <- Binita <- Binu`.
+
+## Edge density
+Edge density means `ecount(g1)/(vcount(g1)*(vcount(g1) -1))`. we calculate if from following code.
+
+```{r}
+edge_density(g1, loops = F)
+```
+We got value of edge density 0.4166667
+
+##  Reciprocity
+
+Total edges = 5
+Tied edges = 2
+Reciprocity = 2/5 = 0.4
+
+```{r}
+reciprocity(g1)
+```
+## closeness
+Now getting closeness of graph.
+
+```{r}
+closeness(g1, mode = "all", weights = NA)
+```
+from above result we see that Binita is closest to the others three persons and Anju is farthest from other three persons.
+
+## Betweenness
+Let's calculate between of g1
+
+```{r}
+betweenness(g1, directed = T, weights = NA)
+
+```
+Binita and Rita has 2 inner edge similarly Binu has one inner edge and Anju has no inner edge.
+
+## Edge Betweenness
+For every pair of vertices in a connected graph, there exists at least one shortest path between the vertices.
+
+```{r}
+edge_betweenness(g1, directed = T, weights = NA)
+```
+## SNA in Twitterdata
+Here I load `Twitterdata` from my local machine.
+
+```{r}
+load("F:/MDS R/termDocMatrix.rdata")
+```
+
+
+```{r}
+m<- as.matrix(termDocMatrix)
+termM <- m %*% t(m)
+termM[1:10,1:10]
+
+```
+Now we have built a term-term adjacency matrix, where the rows and columns represents terms, and every entry is the number of co-occurrences of two terms.
+Next we can build a graph with graph.adjacency() from package igraph.
+
+
+```{r}
+g <- graph.adjacency(termM,weighted = T,mode = 'undirected')
+g
+```
+Here we build graph on `termDocMatrix`. In result we can see the edges between different dodes.
+
+```{r}
+g <- simplify(g)
+g
+```
+Function simplify() in igraph handily removes self-loops from a network. We can see in previous graph there are 151 edges in second graph there are only 130 edges.
+Hence there are 21 self loops they are omitted from the graph.
+
+## Check Degree of graph and nodes of the graph.
+
+```{r}
+V(g)$label <- V(g)$name
+V(g)$label
+V(g)$degree <- degree(g)
+V(g)$degree
+```
+We found degree of graph is  20.
+## Histogram on the basis of degree
+
+```{r}
+hist(V(g)$degree, breaks = 100,col = 'green', main = "Frequency Of Degree", 
+     xlab = " Degree of vertices", ylab = " Frequency")
+```
+We can see most of nodes have degree 9 and 11. We all khow what is degree of graph, number of edges that are incident to the node is called degree of graph.
+
+## Let's Plot  Graph on the Data.
+Let set `set.seed(3952)`.
+
+```{r}
+set.seed(3952)
+
+layout1 <- layout.fruchterman.reingold(g)
+
+plot(g, layout=layout1)
+```
+A different layout can be generated with the first line of code below. The second line produces an interactive plot, which allows us to manually rearrange the layout
+
+
+```{r}
+plot(g, layout=layout.kamada.kawai)
+```
+## Do this to make it better.
+
+```{r}
+V(g)$label.cex <- 2.2 * V(g)$degree / max(V(g)$degree)+ .2
+
+V(g)$label.color <- rgb(0, 0, .2, .8)
+
+V(g)$frame.color <- NA
+
+egam <- (log(E(g)$weight)+.4) / max(log(E(g)$weight)+.4)
+
+E(g)$color <- rgb(.5, .5, 0, egam)
+
+E(g)$width <- egam
+# plot the graph in layout1
+
+plot(g, layout=layout1)
+
+```
+Here size of words appear according to their degree. From graph we can clearly see that node mining has maximum degree.
+
+## Community detection
+Communities are seen as groups, clusters, coherent subgroups, or modules in different fields; community detection in a social network is identifying sets of nodes in such a way that the 
+connections of nodes within a set are more than their connection to other network nodes.
+
+```{r}
+comm <- cluster_edge_betweenness(g)
+plot(comm,g)
+
+```
+There are dense  connection within the group within the community the connection is sparse.
+
+
+```{r}
+prop <- cluster_label_prop(g)
+plot(prop, g)
+```
+This is different type of algorithms to detect community which is different from previous one.
+
+## Hubs
+Nodes with most outer edges. We need to find hub score.
+
+```{r}
+hs <- hub_score(g,weights = NA)$vector
+hs
+
+```
+
+## Authority
+Nodes with most inner edges. We need to find authority score
+```{r}
+as <- authority_score(g, weights = NA)$vector
+as
+```
+## Hub in Plot
+```{r}
+par(mfrow = c(1,2))
+plot(g,vertex.size= hs*50, main = "Hubs",
+     vertex.label = NA,
+     vertex.colour = rainbow(50))
+
+```
+## Authority in Plot
+```{r}
+plot(g,vertex.size= as*30, main = "Authorities",
+     vertex.label = NA,
+     vertex.colour = rainbow(50))
+```
+Hubs are expected to contain large number of outgoing link. And authority are expected to contain large number of incoming link from hubs.
+## Application of SNA in Real World
+
+Social network analysis can provide information about the reach of gangs, the impact of
+gangs, and gang activity. The approach may also allow we to identify those who may be at risk of gang-association
+and/or being exploited by gangs.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+```{r}
+
+```
+

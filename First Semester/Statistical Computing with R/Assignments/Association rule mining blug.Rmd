@@ -1,0 +1,286 @@
+---
+title: "Association"
+author: "Durga Pokharel"
+date: "02/12/2021"
+always_allow_html: true
+output: 
+  md_document:
+    variant: markdown_github
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+# Association Rules Mining:
+Association rule mining (also called as Association Rule Learning)
+is a common technique used to find associations (co-occurrence) between many variables.It is mostly useable in grocery stores, e-commerce websites, and as well as with large transactional data basese.
+
+A most common example that in cour daily lives **Amazon knows what else you want to buy when we order something on their site.**
+
+The same idea extends to Spotify too: They know what song you want to listen to next.
+
+## Use of Association Mining Results:
+
+* Changing the store layout according to trends
+
+* Customer behavior analysis
+
+* Catalogue design
+
+* Cross markteing on online store
+
+* What are the trending items customers buy
+
+* Customized email with add-on sales
+
+## When Association Mining is used ??
+
+Association rule mining is used when we want to find an association between diffrent objects in a set, find frequent patterns in a transaction database, relational databases or any other information repository. The association rule mining are found in `Marketing Basket Analysis` in tetailling clustering and classification. 
+
+It can tell us what items do customers frequently buy together by generating a set of rules called **Association Rules.** . In simple words, it gives us output as rules in form **if this then that.**
+
+## What is Apriori Algorithm and Rule ??
+
+Association rule mining is usually done on transcation data fram a retail market or form an online e-commerce store. Sine most transactions data is large, the `apriori algorithm` makes it easier to find these patterns or rules quickly. Using all the rules in the data with apriori() is not a good idea!
+
+**Rule** 
+A rule is a notation that represents which items is frequently bougth with what items.
+
+It has `LHS` and `RHS` part and can be represent as follow,
+
+    `itemssetA => itemssetB`
+    
+## Association Rule:
+
+### Support:
+
+Association rule are given in the following form,
+
+`A=>B[support, confidence]`
+
+Where A and B are sets of items in the transation data. A and B are disjoint sets.
+
+
+Support = Number of transactions with both A and B / Total number of transactions 
+        = P(A∩B) 
+        = frequency(A, B)/N
+
+### Confidence:
+
+Confidence = Number of transactions with both A and B / Total number of transactions with A
+           = P(A∩B)/P(A) 
+           = frequenc(A, B)/frequency(A)
+           
+           
+
+### Expected Confidence:
+
+Expected Confidence = Number of transactions withB/Total number of transactions
+                    = P(B)
+                    = frequency(B)/N
+                    
+### List:
+
+Lift = Confidence/ExpectedConfidence
+     =P(A∩B)/P(A).P(B) 
+     = Support(A,B)/Support(A).Support(B)
+
+
+
+## Let's Do Association Rule Mining in R.
+
+### Create a list of baskets
+```{r}
+market_basket<- list(c("bread", "milk"),
+                     c("bread","dipers","beer","Egg"),
+                     c("milk","dipers","beer","coka"),
+                     c("bread","milk","dipers","beer"),
+                     c("bread","milk","dipers","coka")
+                     )
+names(market_basket) <- paste("T",c(1:5),sep = "")
+market_basket
+
+```
+We built the five transcations from the list of above data and gave names respectively, T1,T2,T2,T4,T5.
+
+Now let's use `arules packages` of performing further association rule mining tasks. We should have installed mention packages to go forward.
+
+
+###
+```{r}
+library(arules)
+
+
+```
+
+Let's make Transformation of transactions.
+
+```{r}
+trans <- as(market_basket,"transactions")
+
+```
+ 
+Let's check dimension of trans variable,
+```{r}
+dim(trans)
+```
+Here we got 5 6 as answer, it means that we have 5 transactions and 6 items.
+let's check items labels,
+
+```{r}
+labels(trans)
+```
+Here we got items names we have.
+
+```{r}
+summary(trans)
+```
+### Let's inspect the `trans`
+
+```{r}
+inspect(trans)
+```
+It is better to use inspect function. It will show 10 transaction. If our data is very large there will form greater numbers of transaction inspect function becomes handly in this condition.
+
+### Relative frequency plot and plot of trans
+
+```{r}
+itemFrequencyPlot(trans, topN=10, cex.names =1)
+```
+most sold items were `bread`, `milk` and `beer` similarly less sold item is `Egg`. 
+
+```{r}
+image(trans)
+```
+## Why Apriori Algorithms is important here.
+
+Frequent Item set Generation is the most computationally expensive step because it requires a full database scan.In above example, we have seen the example of only 5 transactions, but in real-world transaction data for retail can exceed up to GBs and TBs of data for which anoptimized algorithm is needed to prune out Item-sets that will not help in later steps.
+
+
+
+##Apriori algorithm of “trans” without/with min. support of 0.3 and min. confidence of 0.5.
+
+```{r}
+rues <- apriori(trans)
+rules
+```
+Here, we made set of 15 rules.
+
+```{r}
+rules <- apriori(trans, parameter = list(supp=0.3,conf=0.5,
+                                         maxlen=10,
+                                         target ="rules"))
+```
+**Note: maxlen= maximum length of the transaction! We could have used maxlen= 4 here as we know it but this will not be known in real-life!**
+
+### Summary of rules
+
+```{r}
+summary(rules)
+```
+Here, set of 32 rules are bulit. Among them 4 rules are in transaction 1, 16 in 2 and 12 in 3. Here some empty rues also generated. let's remove these empty rules.
+
+```{r}
+rules <- apriori(trans, parameter = list(supp=0.3,conf = 0.5,
+                                         maxlen =10,
+                                         minlen=2,
+                                         target="rules"))
+```
+## Let"s set RHS rule for trans data
+
+```{r}
+# we set rhs =beer and default = lhs
+beer_rules_rhs<- apriori(trans, parameter = list(supp= 0.3,conf= 0.5,
+                                                 maxlen= 10,
+                                                 minlen=2),
+                         appearance = list(default="lhs",
+                                           rhs ="beer"))
+inspect(beer_rules_rhs)
+```
+Persons who bought the beer his r her maximum previous bought item was dipers similarly second maximum previous sold items were breads,dipers and dipers and milk. It is very intresting insights of data. From this result we can make sence most probably father's went to take baby's things from grocery. 
+
+## Let's put beer in LHS and set RHs as defsult values.
+
+```{r}
+beer_rules_lhs <- apriori(trans, parameter = list(supp=0.3,conf=0.5,
+                                                  maxlen =10,
+                                                  minlen =2),
+                          appearance = list(default="rhs",lhs ="beer"))
+inspect(beer_rules_lhs)
+```
+Persons who bought beer would bought dipers next. Here we show maximum beers buy person also buy diapers.
+
+## Product Recommendation rule:
+
+```{r}
+rules_conf<- sort(rules,by ="confidence",
+                  decreasing = TRUE)
+inspect(rules_conf)
+```
+In above results we sort the rules according to confidence in decresing order.
+
+## Plotting rules with "arulesViz" package
+
+```{r}
+library(arulesViz)
+plot(rules)
+```
+Here, darker orange color indicate those items whose lift value is maximun when lift values decrease colar also become light orange.
+
+Let's plot the same plot by setting `measure = "confidence"`.
+
+```{r}
+plot(rules, measure = "confidence")
+```
+## plot `two-key-plot`
+
+```{r}
+library(arulesViz)
+plot(rules, method = 'two-key plot')
+```
+## Interactive plot with "plotly" engine
+
+```{r}
+library(ggplot2)
+
+plot(rules, engine = "ggplot2")
+```
+If we hover our curcer above orange points we can see the value of supp, conf as well as left. Darker the orange color more will be the value of corresponing parameters.
+
+## Graph Based Visualization
+
+```{r}
+subrules<- head(rules, n=10,by ="confidence")
+plot(subrules, method= "graph",engine = "htmlwidget")
+```
+Here we can select particular items and rules to see more detail about it.
+
+
+## Parallel Coordinate plot for 10 rules:
+
+```{r}
+plot(subrules, method = "paracoord")
+```
+To visualize in higher dimensional space we used parallel coordinate method. Here we visualize in 10 dimensions.
+
+```{r}
+```
+
+
+```{r}
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
