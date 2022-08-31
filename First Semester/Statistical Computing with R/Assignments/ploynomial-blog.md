@@ -2,7 +2,7 @@
 
 Curve fitting or curve-linear regression are additional words for the
 same thing. It is used when a scatterplot shows a non-linear
-relationship. It’s most typically employed with time series data, but it
+relationship. It is most typically employed with time series data, but it
 can be applied to a variety of other situations.
 
 ## Let’s use the Nepal Covid data and fit a polynomial models on Covid deaths using R

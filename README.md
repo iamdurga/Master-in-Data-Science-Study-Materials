@@ -12,3 +12,6 @@ The contents in this repository is used by myself as being student of [Master in
 
 ## Semester One
 * [Link](https://github.com/iamdurga/MDS-Private-Study-Materials/tree/master/First%20Semester)
+
+## Semester Two
+* [Link](https://github.com/iamdurga/MDS-Private-Study-Materials/tree/master/Second%20Semester)
