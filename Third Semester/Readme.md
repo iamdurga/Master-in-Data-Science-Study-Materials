@@ -16,8 +16,8 @@
 
 * [Decision Analysis](https://github.com/iamdurga/MDS-Private-Study-Materials/tree/master/Third%20Semester/Decision%20Analysis)
     * [Assignments](https://github.com/iamdurga/MDS-Private-Study-Materials/tree/master/Third%20Semester/Decision%20Analysis/Assignments)
-    * [Books](https://github.com/iamdurga/MDS-Private-Study-Materials/tree/master/  Third%20Semester/Decision%20Analysis/Books)
-    * [Notes](https://github.com/iamdurga/MDS-Private-Study-Materials/tree/master/  Third%20Semester/Decision%20Analysis/Notes)
+    * [Books](https://github.com/iamdurga/MDS-Private-Study-Materials/tree/master/Third%20Semester/Decision%20Analysis/Books)
+    * [Notes](https://github.com/iamdurga/MDS-Private-Study-Materials/tree/master/Third%20Semester/Decision%20Analysis/Notes)
     * [Syllabus](https://github.com/iamdurga/MDS-Private-Study-Materials/tree/master/Third%20Semester/Decision%20Analysis/Syllabus)
     * [Data](https://github.com/iamdurga/MDS-Private-Study-Materials/tree/master/Third%20Semester/Decision%20Analysis/Data)
 
