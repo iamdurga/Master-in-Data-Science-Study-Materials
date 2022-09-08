@@ -1,0 +1,36 @@
+# Third Semester
+* [Big Data](https://github.com/iamdurga/MDS-Private-Study-Materials/tree/master/Third%20Semester/Big%20data)
+    * [Assignments](https://github.com/iamdurga/MDS-Private-Study-Materials/tree/master/Third%20Semester/Big%20data/Assignments)
+    * [Books](https://github.com/iamdurga/MDS-Private-Study-Materials/tree/master/Third%20Semester/Big%20Data/Books)
+    * [Notes](https://github.com/iamdurga/MDS-Private-Study-Materials/tree/master/Third%20Semester/Big%20Data/Notes)
+    * [Syllabus](https://github.com/iamdurga/MDS-Private-Study-Materials/tree/master/Third%20Semester/Big%20Data/Syllabus)
+    * [Data](https://github.com/iamdurga/MDS-Private-Study-Materials/tree/master/Third%20Semester/Big%20Data/Data)
+
+
+* [Data Mining](https://github.com/iamdurga/MDS-Private-Study-Materials/tree/master/Third%20Semester/Data%20Mining)
+    * [Assignments](https://github.com/iamdurga/MDS-Private-Study-Materials/tree/master/Third%20Semester/Data%20Mining/Assignments)
+    * [Books](https://github.com/iamdurga/MDS-Private-Study-Materials/tree/master/Third%20Semester/Data%20Mining/Books)
+    * [Notes](https://github.com/iamdurga/MDS-Private-Study-Materials/tree/master/Third%20Semester/Data%20Mining/Notes)
+    * [Syllabus](https://github.com/iamdurga/MDS-Private-Study-Materials/tree/master/Third%20Semester/Data%20Mining/Syllabus)
+    * [Data](https://github.com/iamdurga/MDS-Private-Study-Materials/tree/master/Third%20Semester/Data%20Mining/Data)
+
+* [Decision Analysis](https://github.com/iamdurga/MDS-Private-Study-Materials/tree/master/Third%20Semester/Decision%20Analysis)
+    * [Assignments](https://github.com/iamdurga/MDS-Private-Study-Materials/tree/master/Third%20Semester/Decision%20Analysis/Assignments)
+    * [Books](https://github.com/iamdurga/MDS-Private-Study-Materials/tree/master/  Third%20Semester/Decision%20Analysis/Books)
+    * [Notes](https://github.com/iamdurga/MDS-Private-Study-Materials/tree/master/  Third%20Semester/Decision%20Analysis/Notes)
+    * [Syllabus](https://github.com/iamdurga/MDS-Private-Study-Materials/tree/master/Third%20Semester/Decision%20Analysis/Syllabus)
+    * [Data](https://github.com/iamdurga/MDS-Private-Study-Materials/tree/master/Third%20Semester/Decision%20Analysis/Data)
+
+* [Monte Carlo](https://github.com/iamdurga/MDS-Private-Study-Materials/tree/master/Third%20Semester/Monte%20Carlo)
+    * [Assignments](https://github.com/iamdurga/MDS-Private-Study-Materials/tree/master/Third%20Semester/Monte%20Carlo/Assignments)
+    * [Books](https://github.com/iamdurga/MDS-Private-Study-Materials/tree/master/Third%20Semester/Monte%20Carlo/Books)
+    * [Notes](https://github.com/iamdurga/MDS-Private-Study-Materials/tree/master/Third%20Semester/Monte%20Carlo/Notes)
+    * [Syllabus](https://github.com/iamdurga/MDS-Private-Study-Materials/tree/master/Third%20Semester/Monte%20Carlo/Syllabus)
+    * [Data](https://github.com/iamdurga/MDS-Private-Study-Materials/tree/master/Third%20Semester/Monte%20Carlo/Data)
+
+* [Research Methodology](https://github.com/iamdurga/MDS-Private-Study-Materials/tree/master/Third%20Semester/Research%20Methodology)
+    * [Assignments](https://github.com/iamdurga/MDS-Private-Study-Materials/tree/master/Third%20Semester/Research%20Methodology/Assignments)
+    * [Books](https://github.com/iamdurga/MDS-Private-Study-Materials/tree/master/Third%20Semester/Research%20Methodology/Books)
+    * [Notes](https://github.com/iamdurga/MDS-Private-Study-Materials/tree/master/Third%20Semester/Research%20Methodology/Notes)
+    * [Syllabus](https://github.com/iamdurga/MDS-Private-Study-Materials/tree/master/Third%20Semester/Research%20Methodology/Syllabus)
+    * [Data](https://github.com/iamdurga/MDS-Private-Study-Materials/tree/master/Third%20Semester/Research%20Methodology/Data)
