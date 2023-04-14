@@ -18,3 +18,6 @@ The contents in this repository is used by myself as being student of [Master in
 
 ## Semester Three
 * [Link](https://github.com/iamdurga/MDS-Private-Study-Materials/tree/master/Third%20Semester)
+
+## Semester Four
+* [Link](https://github.com/iamdurga/MDS-Private-Study-Materials/tree/master/Fourth%20Semester)
