@@ -64,6 +64,7 @@ findAssocs(tdm,"r",0.1)
 
 ```
 ```{r}
+
 load("F:/MDS R/termDocMatrix.rdata")
 data <- termDocMatrix
 library(wordcloud)
@@ -94,5 +95,16 @@ V(g)$degree <- degree(g)
 hist(V(g)$degree, breaks = 100,col = 'green', main = "Frequency Of Degree", xlab = " Degree of vertices", ylab = " Frequency")
 
 
+```
+
+```{r}
+data = read.table("F:/MDS-Private-Study-Materials/First Semester/Statistical Computing with R/Assignments/Data/binary.tsv", fill = TRUE, header = FALSE)
+head(data)
+
+str(data)
+
+summary(data)
+
+data_rating = 
 ```
 
