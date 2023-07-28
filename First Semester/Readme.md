@@ -2,7 +2,7 @@
 * [Data Structure and Algorithms](https://github.com/iamdurga/MDS-Private-Study-Materials/tree/master/First%20Semester/Data%20Structure%20and%20Algoritms)
     * [Notes](https://github.com/iamdurga/MDS-Private-Study-Materials/tree/master/First%20Semester/Data%20Structure%20and%20Algoritms/Notes)
     * [Assignments](https://github.com/iamdurga/MDS-Private-Study-Materials/tree/master/First%20Semester/Data%20Structure%20and%20Algoritms/Assignments)
-    *[Question Papers](https://github.com/iamdurga/MDS-Private-Study-Materials/tree/master/First%20Semester/Data%20Structure%20and%20Algoritms/Question%20Papers)
+    * [Question Papers](https://github.com/iamdurga/MDS-Private-Study-Materials/tree/master/First%20Semester/Data%20Structure%20and%20Algoritms/Question%20Papers)
 * [Database Management System](https://github.com/iamdurga/MDS-Private-Study-Materials/tree/master/First%20Semester/Database%20Management%20Systems)
     * [Notes](https://github.com/iamdurga/MDS-Private-Study-Materials/tree/master/First%20Semester/Database%20Management%20Systems/Notes)
     * [Assignments](https://github.com/iamdurga/MDS-Private-Study-Materials/tree/master/First%20Semester/Database%20Management%20Systems/Assignments)
