@@ -1,5 +1,5 @@
 # MDS-Private-Study-Materials
-The contents in this repository is used by myself as being student of [Master in Data Science, offered by Tribhuwan University](https://smstu.edu.np/admission-procedure-and-eligibility/) starting from 2021.
+The contents in this repository is used by myself as being student of [Master in Data Science, offered by Tribhuwan University](https://smstu.edu.np/admission-procedure-and-eligibility/).
 
 ## Structure of Directories
 * Semester Folder

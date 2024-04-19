@@ -5,6 +5,7 @@
     * [Notes](https://github.com/iamdurga/MDS-Private-Study-Materials/tree/master/Second%20Semester/Applied%20Maching%20Learning/Notes)
     * [Syllabus](https://github.com/iamdurga/MDS-Private-Study-Materials/tree/master/Second%20Semester/Applied%20Maching%20Learning/Syllabus)
     * [Data](https://github.com/iamdurga/MDS-Private-Study-Materials/tree/master/Second%20Semester/Applied%20Maching%20Learning/Data)
+    * [Question Papers](https://github.com/iamdurga/MDS-Private-Study-Materials/tree/master/Second%20Semester/Applied%20Maching%20Learning/Question%20Papers)
 
 
 * [Artificial Intelligence](https://github.com/iamdurga/MDS-Private-Study-Materials/tree/master/Second%20Semester/Artificial%20Intelligence)
@@ -13,6 +14,7 @@
     * [Notes](https://github.com/iamdurga/MDS-Private-Study-Materials/tree/master/Second%20Semester/Artificial%20Intelligence/Notes)
     * [Syllabus](https://github.com/iamdurga/MDS-Private-Study-Materials/tree/master/Second%20Semester/Artificial%20Intelligence/Syllabus)
     * [Data](https://github.com/iamdurga/MDS-Private-Study-Materials/tree/master/Second%20Semester/Artificial%20Intelligence/Data)
+    * [Question Papers](https://github.com/iamdurga/MDS-Private-Study-Materials/tree/master/Second%20Semester/Artificial%20Intelligence/Question%20Papers)
 
 * [Multivariable Calculus](https://github.com/iamdurga/MDS-Private-Study-Materials/tree/master/Second%20Semester/Multivariable%20Calculus)
     * [Assignments](https://github.com/iamdurga/MDS-Private-Study-Materials/tree/master/Second%20Semester/Multivariable%20Calculus/Assignments)
@@ -20,6 +22,7 @@
     * [Notes](https://github.com/iamdurga/MDS-Private-Study-Materials/tree/master/Second%20Semester/Multivariable%20Calculus/Notes)
     * [Syllabus](https://github.com/iamdurga/MDS-Private-Study-Materials/tree/master/Second%20Semester/Multivariable%20Calculus/Syllabus)
     * [Data](https://github.com/iamdurga/MDS-Private-Study-Materials/tree/master/Second%20Semester/Multivariable%20Calculus/Data)
+    * [Question Papers](https://github.com/iamdurga/MDS-Private-Study-Materials/tree/master/Second%20Semester/Multivariable%20Calculus/Question%20Papers)
 
 * [Python Programming](https://github.com/iamdurga/MDS-Private-Study-Materials/tree/master/Second%20Semester/Python%20Programming)
     * [Assignments](https://github.com/iamdurga/MDS-Private-Study-Materials/tree/master/Second%20Semester/Python%20Programming/Assignments)
@@ -27,6 +30,7 @@
     * [Notes](https://github.com/iamdurga/MDS-Private-Study-Materials/tree/master/Second%20Semester/Python%20Programming/Notes)
     * [Syllabus](https://github.com/iamdurga/MDS-Private-Study-Materials/tree/master/Second%20Semester/Python%20Programming/Syllabus)
     * [Data](https://github.com/iamdurga/MDS-Private-Study-Materials/tree/master/Second%20Semester/Python%20Programming/Data)
+    * [Question Papers](https://github.com/iamdurga/MDS-Private-Study-Materials/tree/master/Second%20Semester/Python%20Programming/Question%20Papers)
 
 * [Statistics for Data Science](https://github.com/iamdurga/MDS-Private-Study-Materials/tree/master/Second%20Semester/Statistics%20for%20Data%20Science)
     * [Assignments](https://github.com/iamdurga/MDS-Private-Study-Materials/tree/master/Second%20Semester/Statistics%20for%20Data%20Science/Assignments)
@@ -34,3 +38,4 @@
     * [Notes](https://github.com/iamdurga/MDS-Private-Study-Materials/tree/master/Second%20Semester/Statistics%20for%20Data%20Science/Notes)
     * [Syllabus](https://github.com/iamdurga/MDS-Private-Study-Materials/tree/master/Second%20Semester/Statistics%20for%20Data%20Science/Syllabus)
     * [Data](https://github.com/iamdurga/MDS-Private-Study-Materials/tree/master/Second%20Semester/Statistics%20for%20Data%20Science/Data)
+    * [Question Papers](https://github.com/iamdurga/MDS-Private-Study-Materials/tree/master/Second%20Semester/Statistics%20for%20Data%20Science/Question%20Papers)
